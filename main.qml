@@ -2,66 +2,40 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+/*TODO:
+  banner for incorrect pin;
+*/
+
 Window {
     id: window
     width: 640
     height: 480
-    minimumHeight: 200
-    minimumWidth: 200
+    minimumHeight: 400
+    minimumWidth: 250
     visible: true
-    title: qsTr("Hello World")
+    title: qsTr("Psswd mngr")
 
     property int defMargin: 5
 
     StackView {
         id: stackView
         anchors.fill: parent
-        initialItem: page1
+        initialItem: loginPage
     }
 
-    ColumnLayout {
-        id: page1
-        anchors.fill: parent
-        anchors.margins: defMargin
-        spacing: 5
-
-        ColumnLayout {
-            id: loginLayout
-//            Layout.minimumHeight: 200
-            Layout.minimumWidth: 200
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignCenter
-
-
-            Label {
-               text: "Pin"
-            }
-            TextField {
-                placeholderText: "Enter your pin"
-                echoMode: TextInput.Password
-                selectByMouse: true
-
-            }
-            Button {
-                text: "Login"
-                onClicked: {
-                    stackView.push(page2)
-                }
-            }
-        }
-
+    Login {
+        id: loginPage
     }
 
-//    Simplepage {
-//        id: page1
-//        buttonText: "Login"
-//        onButtonClicked: {
-//            stackView.push(page2)
-//        }
-//    }
-    Simplepage {
-        id: page2
+    Data {
+        id: credPage
         visible: false
+    }
+
+    Connections {
+        target: loginPage
+        function onSuccessPin() {
+            stackView.push(credPage);
+        }
     }
 }

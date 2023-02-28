@@ -1,7 +1,11 @@
 QT += quick
 
 SOURCES += \
-        main.cpp
+        authmanager.cpp \
+        listcontroller.cpp \
+        main.cpp \
+        mymodel.cpp \
+        securemanager.cpp
 
 resources.files = main.qml
 resources.prefix = /$${TARGET}
@@ -12,7 +16,8 @@ RESOURCES += resources \
 
 OTHER_FILES += \
     main.qml \
-    Simplepage.qml
+    Data.qml \
+    Login.qml
 
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
@@ -27,4 +32,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    Simplepage.qml
+    data.json
+
+HEADERS += \
+    authmanager.h \
+    listcontroller.h \
+    mymodel.h \
+    securemanager.h
