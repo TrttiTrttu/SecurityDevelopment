@@ -22,6 +22,7 @@ public:
 
     QVector<ListItem> mItems;
     void appendItem(QVector<ListItem> items);
+    void appendItem(QString site, QString login, QString password);
 
 signals:
     void preItemAppended();
@@ -30,8 +31,11 @@ signals:
     void preItemRemoved(int index);
     void postItemRemoved();
 
-public slots:
+    void entryCreated();
 
+public slots:
+    void onCheckCreateEntry(QString site, QString login, QString password);
+    void onEntryDeleteClicked();
     void removeCompletedItems();
 
 private:

@@ -32,10 +32,29 @@ Window {
         visible: false
     }
 
+    Form {
+        id: formPage
+        visible: false
+    }
+
     Connections {
         target: loginPage
         function onSuccessPin() {
             stackView.push(credPage);
+        }
+    }
+
+    Connections {
+        target: credPage
+        function onEntryCreateClicked() {
+            stackView.push(formPage)
+        }
+    }
+
+    Connections {
+        target: formPage
+        function onSuccessCreated() {
+            stackView.pop()
         }
     }
 }

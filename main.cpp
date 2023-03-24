@@ -45,5 +45,11 @@ int main(int argc, char *argv[])
     QObject *authPage = engine.rootObjects().constFirst()->children().at(2);
     QObject::connect(authPage, SIGNAL(checkPin(QString)), &auth, SLOT(onCheckPin(QString)));
 
+    QObject *dataPage = engine.rootObjects().constFirst()->children().at(3);
+    QObject::connect(dataPage, SIGNAL(entryDeleteClicked()), &auth, SLOT(onEntryDeleteClicked()));
+
+    QObject *formPage = engine.rootObjects().constFirst()->children().at(4);
+    QObject::connect(formPage, SIGNAL(checkCreateEntry(QString, QString, QString)), &listcontroller, SLOT(onCheckCreateEntry(QString, QString, QString)));
+
     return app.exec();
 }

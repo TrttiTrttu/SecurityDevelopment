@@ -1,4 +1,5 @@
 #include "listcontroller.h"
+#include <qDebug>
 
 ListController::ListController(QObject *parent)
     : QObject{parent}
@@ -31,6 +32,29 @@ void ListController::appendItem(QVector<ListItem> items)
         mItems.append(items.at(i));
         emit postItemAppended();
     }
+}
+
+void ListController::appendItem(QString site, QString login, QString password)
+{
+    ListItem NewItem;
+    NewItem.site = site;
+    NewItem.login = login;
+    NewItem.password = password;
+
+    emit preItemAppended();
+    mItems.append(NewItem);
+    emit postItemAppended();
+}
+
+void ListController::onCheckCreateEntry(QString site, QString login, QString password)
+{
+    this->appendItem(site, login, password);
+    emit entryCreated();
+}
+
+void ListController::onEntryDeleteClicked()
+{
+
 }
 
 void ListController::removeCompletedItems()

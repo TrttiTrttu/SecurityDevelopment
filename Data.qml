@@ -3,12 +3,15 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Page {
-    id: root
+    id: dataPage
+
+    signal entryCreateClicked()
+    signal entryDeleteClicked()
 
     ListView {
         id: dataList
         implicitHeight: 400
-        implicitWidth: 250
+        implicitWidth: 300
         anchors.centerIn: parent
         clip: true
 
@@ -34,5 +37,24 @@ Page {
             }
         }
     }
+
+    GridLayout {
+        anchors.top: dataList.bottom
+        anchors.horizontalCenter: dataList.horizontalCenter
+        Button {
+            text: "Create"
+            onClicked: {
+                dataPage.entryCreateClicked()
+            }
+        }
+        Button {
+            text: "Delete"
+            onClicked: {
+                dataPage.entryDeleteClicked()
+            }
+        }
+    }
+
+
 
 }
