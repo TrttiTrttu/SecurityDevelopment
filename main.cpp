@@ -10,10 +10,6 @@
 
 int main(int argc, char *argv[])
 {
-//    qmlRegisterType<listModel>("LM", 1, 0, "MyListModel");
-//    qmlRegisterUncreatableType<listController>("LM", 1, 0, "ListController",
-//            QStringLiteral("listController should not be created in QML"));
-
     QGuiApplication app(argc, argv);
 
     QString path = QCoreApplication::applicationDirPath() + "/data.json";
@@ -31,7 +27,7 @@ int main(int argc, char *argv[])
     securemanager.mItems = &listcontroller.mItems;
     context->setContextProperty("ListController", &listcontroller);
     QObject::connect(&listcontroller, SIGNAL(entryCreated()), &securemanager, SLOT(onEntryCreated()));
-
+    QObject::connect(&listcontroller, SIGNAL(entryDeleted()), &securemanager, SLOT(onEntryDeleted()));
 
     MyModel mymodel;
     mymodel.setList(&listcontroller);
@@ -49,7 +45,7 @@ int main(int argc, char *argv[])
     QObject::connect(authPage, SIGNAL(checkPin(QString)), &auth, SLOT(onCheckPin(QString)));
 
     QObject *dataPage = engine.rootObjects().constFirst()->children().at(3);
-    QObject::connect(dataPage, SIGNAL(entryDeleteClicked()), &auth, SLOT(onEntryDeleteClicked()));
+    QObject::connect(dataPage, SIGNAL(entryDeleteClicked()), &listcontroller, SLOT(onEntryDeleteClicked()));
 
     QObject *formPage = engine.rootObjects().constFirst()->children().at(4);
     QObject::connect(formPage, SIGNAL(checkCreateEntry(QString, QString, QString)), &listcontroller, SLOT(onCheckCreateEntry(QString, QString, QString)));

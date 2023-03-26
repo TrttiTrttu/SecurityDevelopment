@@ -18,7 +18,7 @@ bool ListController::setItemAt(int index, const ListItem &item)
         return false;
 
     const ListItem &oldItem = mItems.at(index);
-    if (item.site == oldItem.site && item.login == oldItem.login && item.password == oldItem.password)
+    if (item.site == oldItem.site && item.login == oldItem.login && item.password == oldItem.password && item.deleted == oldItem.deleted)
         return false;
 
     mItems[index] = item;
@@ -54,20 +54,21 @@ void ListController::onCheckCreateEntry(QString site, QString login, QString pas
 
 void ListController::onEntryDeleteClicked()
 {
-
+    this->removeCompletedItems();
+    emit entryDeleted();
 }
 
 void ListController::removeCompletedItems()
 {
-//    for (int i = 0; i < mItems.size(); ) {
-//        if (mItems.at(i).done) {
-//            emit preItemRemoved(i);
+    for (int i = 0; i < mItems.size(); ) {
+        if (mItems.at(i).deleted) {
+            emit preItemRemoved(i);
 
-//            mItems.removeAt(i);
+            mItems.removeAt(i);
 
-//            emit postItemRemoved();
-//        } else {
-//            ++i;
-//        }
-//    }
+            emit postItemRemoved();
+        } else {
+            ++i;
+        }
+    }
 }

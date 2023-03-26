@@ -17,6 +17,7 @@ Page {
         }
         TextField {
             id: siteField
+            text: ""
             placeholderText: "Enter site url"
             selectByMouse: true
         }
@@ -25,6 +26,7 @@ Page {
         }
         TextField {
             id: loginField
+            text: ""
             placeholderText: "Enter login"
             selectByMouse: true
         }
@@ -34,6 +36,7 @@ Page {
         }
         TextField {
             id: passwordField
+            text: ""
             placeholderText: "Enter password"
             echoMode: TextInput.Password
             selectByMouse: true

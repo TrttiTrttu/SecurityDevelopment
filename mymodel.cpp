@@ -29,6 +29,8 @@ QVariant MyModel::data(const QModelIndex &index, int role) const
         return QVariant(item.login);
     case passwordRole:
         return QVariant(item.password);
+    case deletedRole:
+        return QVariant(item.deleted);
     }
 
     return QVariant();
@@ -49,6 +51,9 @@ bool MyModel::setData(const QModelIndex &index, const QVariant &value, int role)
             break;
         case passwordRole:
             item.password = value.toString();
+            break;
+        case deletedRole:
+            item.deleted = value.toBool();
             break;
         }
 
@@ -73,6 +78,7 @@ QHash<int, QByteArray> MyModel::roleNames() const
     names[siteRole] = "site";
     names[loginRole] = "login";
     names[passwordRole] = "password";
+    names[deletedRole] = "deleted";
     return names;
 
 }

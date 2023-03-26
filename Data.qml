@@ -20,23 +20,37 @@ Page {
         delegate: RowLayout {
             width: parent.width
 
-            TextEdit {
+            Label {
+                id: site
                 text: model.site
-                readOnly: true
-//                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignLeft
+                font.pixelSize: 16
+                verticalAlignment: Text.AlignVCenter
+
+                Layout.fillHeight: true
+                Layout.fillWidth: true
             }
-            TextEdit {
-                text: model.login
-                readOnly: true
-//                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignLeft
+            Label {
+                id: login
+                text: qsTr("•").repeat(model.login.length)
+                font.pixelSize: 26
+
+                verticalAlignment: Text.AlignVCenter
+                Layout.fillHeight: true
+                Layout.preferredWidth: parent.width * 0.3
             }
-            TextEdit {
-                text: model.password
-                readOnly: true
-//                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignLeft
+            Label  {
+                id: password
+                text: qsTr("•").repeat(model.password.length)
+                font.pixelSize: 26
+
+                verticalAlignment: Text.AlignVCenter
+                Layout.fillHeight: true
+                Layout.preferredWidth: parent.width * 0.3
+            }
+            CheckBox {
+                checked: model.deleted
+                onClicked: model.deleted = checked
+                Layout.fillHeight: true
             }
         }
     }
@@ -46,15 +60,11 @@ Page {
         anchors.horizontalCenter: dataList.horizontalCenter
         Button {
             text: "Create"
-            onClicked: {
-                dataPage.entryCreateClicked()
-            }
+            onClicked: dataPage.entryCreateClicked()
         }
         Button {
             text: "Delete"
-            onClicked: {
-                dataPage.entryDeleteClicked()
-            }
+            onClicked: dataPage.entryDeleteClicked()
         }
     }
 

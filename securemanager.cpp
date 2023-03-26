@@ -56,7 +56,6 @@ bool SecureManager::SaveJson()
         itemObject["site"] = tmp.at(i).site;
         itemObject["login"] = tmp.at(i).login;
         itemObject["password"] = tmp.at(i).password;
-//        creds_list.insert(i, itemObject.toVariantMap());
         creds_list.append(itemObject.toVariantMap());
     }
 
@@ -75,3 +74,9 @@ void SecureManager::onEntryCreated()
 {
     this->SaveJson();
 }
+
+void SecureManager::onEntryDeleted()
+{
+    this->SaveJson();
+}
+

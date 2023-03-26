@@ -10,6 +10,7 @@ struct ListItem
     QString site;
     QString login;
     QString password;
+    bool deleted = false;
 };
 
 class ListController : public QObject
@@ -33,6 +34,7 @@ signals:
     void postItemRemoved();
 
     void entryCreated();
+    void entryDeleted();
 
 public slots:
     void onCheckCreateEntry(QString site, QString login, QString password);

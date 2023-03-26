@@ -24,6 +24,7 @@ private:
 
 public slots:
     void onEntryCreated();
+    void onEntryDeleted();
 };
 
 #endif // SECUREMANAGER_H
