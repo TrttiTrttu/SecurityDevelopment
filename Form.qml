@@ -54,6 +54,9 @@ Page {
         target: ListController
         function onEntryCreated() {
             formPage.successCreated();
+            siteField.text = "";
+            loginField.text = "";
+            passwordField.text = "";
             return;
         }
     }

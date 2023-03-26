@@ -8,6 +8,17 @@ Page {
     signal entryCreateClicked()
     signal entryDeleteClicked()
 
+    TextField {
+        id: searchField
+        anchors.horizontalCenter: parent.horizontalCenter
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        placeholderText: "Search..."
+        font.pixelSize: 15
+        onDisplayTextChanged: searchFilterModel.onSearchInputChanged(displayText)
+
+    }
+
     ListView {
         id: dataList
         implicitHeight: 400
@@ -15,7 +26,7 @@ Page {
         anchors.centerIn: parent
         clip: true
 
-        model: MyModel
+        model: searchFilterModel
 
         delegate: RowLayout {
             width: parent.width

@@ -7,6 +7,7 @@
 #include <listcontroller.h>
 #include <mymodel.h>
 #include <securemanager.h>
+#include <searchfilter.h>
 
 int main(int argc, char *argv[])
 {
@@ -31,7 +32,10 @@ int main(int argc, char *argv[])
 
     MyModel mymodel;
     mymodel.setList(&listcontroller);
-    context->setContextProperty("MyModel", &mymodel);
+//    context->setContextProperty("MyModel", &mymodel);
+
+    SearchFilter searchFilter(&mymodel, mymodel.siteRole);
+    context->setContextProperty("searchFilterModel", &searchFilter);
 
     const QUrl url(u"qrc:/main.qml"_qs);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

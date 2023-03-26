@@ -5,6 +5,7 @@ SOURCES += \
         listcontroller.cpp \
         main.cpp \
         mymodel.cpp \
+        searchfilter.cpp \
         securemanager.cpp
 
 resources.files = main.qml
@@ -38,4 +39,5 @@ HEADERS += \
     authmanager.h \
     listcontroller.h \
     mymodel.h \
+    searchfilter.h \
     securemanager.h
