@@ -28,7 +28,10 @@ int main(int argc, char *argv[])
 
     ListController listcontroller;
     listcontroller.appendItem(securemanager.ParseJson());
+    securemanager.mItems = &listcontroller.mItems;
     context->setContextProperty("ListController", &listcontroller);
+    QObject::connect(&listcontroller, SIGNAL(entryCreated()), &securemanager, SLOT(onEntryCreated()));
+
 
     MyModel mymodel;
     mymodel.setList(&listcontroller);

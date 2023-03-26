@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QVector>
 
+
 struct ListItem
 {
     QString site;

@@ -36,3 +36,42 @@ QVector<ListItem> SecureManager::ParseJson()
 
     return res;
 }
+
+bool SecureManager::SaveJson()
+{
+    qDebug() << this->jFile.fileName();
+    QVector <ListItem> tmp = *this->mItems;
+
+    for (int i = 0; i < tmp.count(); i++) {
+        qDebug() << tmp.at(i).login;
+    }
+    QJsonDocument jsonDoc;
+    QJsonObject root_obj = jsonDoc.object();
+    QVariantMap root_map = root_obj.toVariantMap();
+    QVariantList creds_list = root_map["creds"].toList();
+
+
+    for (int i = 0; i < tmp.count(); i++) {
+        QJsonObject itemObject;
+        itemObject["site"] = tmp.at(i).site;
+        itemObject["login"] = tmp.at(i).login;
+        itemObject["password"] = tmp.at(i).password;
+//        creds_list.insert(i, itemObject.toVariantMap());
+        creds_list.append(itemObject.toVariantMap());
+    }
+
+    root_map.insert("creds", creds_list);
+
+    if(!this->jFile.open(QIODevice::WriteOnly)){
+        qDebug()<<"Failed to open on write";
+        return false;
+    }
+    this->jFile.write(jsonDoc.fromVariant(root_map).toJson());
+    this->jFile.close();
+    return true;
+}
+
+void SecureManager::onEntryCreated()
+{
+    this->SaveJson();
+}

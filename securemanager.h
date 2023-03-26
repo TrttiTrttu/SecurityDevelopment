@@ -16,9 +16,14 @@ class SecureManager: public QObject
 public:
     SecureManager(const QString path);
     QVector<ListItem> ParseJson();
+    bool SaveJson();
+    QVector<ListItem> *mItems;
 
 private:
     QFile jFile;
+
+public slots:
+    void onEntryCreated();
 };
 
 #endif // SECUREMANAGER_H

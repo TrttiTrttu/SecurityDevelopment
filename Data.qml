@@ -23,17 +23,20 @@ Page {
             TextEdit {
                 text: model.site
                 readOnly: true
-                Layout.fillWidth: true
+//                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignLeft
             }
             TextEdit {
                 text: model.login
                 readOnly: true
-                Layout.fillWidth: true
+//                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignLeft
             }
             TextEdit {
                 text: model.password
                 readOnly: true
-                Layout.fillWidth: true
+//                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignLeft
             }
         }
     }
