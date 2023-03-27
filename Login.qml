@@ -9,6 +9,28 @@ Page {
     signal checkPin(string pin)
     signal successPin()
 
+
+    Popup {
+        id: popup
+        anchors.centerIn: Overlay.overlay
+        width: 300
+        height: 250
+        modal: true
+        focus: true
+
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            Label {
+                id: label
+                Layout.alignment: Qt.AlignHCenter
+                font.pixelSize: 18
+                text: "Incorrect Password"
+            }
+        }
+    }
+
     ColumnLayout {
         id: loginLayout
         anchors.centerIn: parent
@@ -39,6 +61,7 @@ Page {
                 loginPage.successPin();
                 return;
             }
+            popup.open()
         }
     }
 }

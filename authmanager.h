@@ -4,20 +4,26 @@
 #include <QObject>
 #include <qDebug>
 
+#include <securemanager.h>
+
 class authManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit authManager(QObject *parent = nullptr);
-    bool checkPin(QString pin);
+    authManager(const QString path);
+
+    bool checkPin(QByteArray key);
+    SecureManager SM;
 
 signals:
     void pinChecked(bool res);
+    void keyCreated(QByteArray key);
 
 public slots:
     void onCheckPin(QString pin);
 
 private:
+    QFile jFile;
     const QString mPin = "123";
 
 };

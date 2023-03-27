@@ -41,3 +41,8 @@ HEADERS += \
     mymodel.h \
     searchfilter.h \
     securemanager.h
+
+win32: LIBS += -L$$PWD/../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibcrypto
+
+INCLUDEPATH += $$PWD/../../../../Qt/Tools/OpenSSL/Win_x64/include
+DEPENDPATH += $$PWD/../../../../Qt/Tools/OpenSSL/Win_x64/include

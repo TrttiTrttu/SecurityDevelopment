@@ -40,9 +40,7 @@ public slots:
     void onCheckCreateEntry(QString site, QString login, QString password);
     void onEntryDeleteClicked();
     void removeCompletedItems();
-
-private:
-//    QVector<ListItem> mItems;
+    void onJSONparsed(QVector<ListItem>  *data);
 
 };
 

@@ -15,24 +15,25 @@ int main(int argc, char *argv[])
 
     QString path = QCoreApplication::applicationDirPath() + "/data.json";
     SecureManager securemanager(path);
-    securemanager.ParseJson();
+//    securemanager.ParseJson();
 
     QQmlApplicationEngine engine;
     QQmlContext *context = engine.rootContext();
 
-    authManager auth;
+    authManager auth(path);
     context->setContextProperty("auth", &auth);
+     QObject::connect(&auth, &authManager::keyCreated , &securemanager, &SecureManager::onKeyCreated);
 
     ListController listcontroller;
-    listcontroller.appendItem(securemanager.ParseJson());
+//    listcontroller.appendItem(securemanager.ParseJson());
     securemanager.mItems = &listcontroller.mItems;
     context->setContextProperty("ListController", &listcontroller);
-    QObject::connect(&listcontroller, SIGNAL(entryCreated()), &securemanager, SLOT(onEntryCreated()));
-    QObject::connect(&listcontroller, SIGNAL(entryDeleted()), &securemanager, SLOT(onEntryDeleted()));
+    QObject::connect(&listcontroller, &ListController::entryCreated, &securemanager, &SecureManager::onEntryCreated);
+    QObject::connect(&listcontroller, &ListController::entryDeleted, &securemanager, &SecureManager::onEntryDeleted);
+    QObject::connect(&securemanager, &SecureManager::JSONparsed, &listcontroller, &ListController::onJSONparsed);
 
     MyModel mymodel;
     mymodel.setList(&listcontroller);
-//    context->setContextProperty("MyModel", &mymodel);
 
     SearchFilter searchFilter(&mymodel, mymodel.siteRole);
     context->setContextProperty("searchFilterModel", &searchFilter);

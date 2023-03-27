@@ -72,3 +72,8 @@ void ListController::removeCompletedItems()
         }
     }
 }
+
+void ListController::onJSONparsed(QVector<ListItem> *data)
+{
+    this->appendItem(*data);
+}

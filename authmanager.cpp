@@ -1,20 +1,26 @@
 #include "authmanager.h"
 
-
-authManager::authManager(QObject *parent)
-    : QObject{parent}
+authManager::authManager(const QString path)
 {
-
+    this->jFile.setFileName(path);
 }
 
-bool authManager::checkPin(QString pin)
+bool authManager::checkPin(QByteArray key)
 {
-    return pin == this->mPin;
+    qDebug() << "key: " << key.toBase64();
+    QByteArray *buff = new QByteArray;
+    bool res =  SecureManager::DecryptFile(key, this->jFile, *buff);
+
+    delete buff;
+    return res;
 }
 
 void authManager::onCheckPin(QString pin)
 {
     qDebug() << pin;
-    bool res = checkPin(pin);
+    QByteArray key = SecureManager::GenerateKey(pin.toUtf8());
+    bool res = checkPin(key);
     emit pinChecked(res);
+
+    if (res) emit keyCreated(key);
 }
