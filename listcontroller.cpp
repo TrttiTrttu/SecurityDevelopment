@@ -1,4 +1,5 @@
 #include "listcontroller.h"
+#include <securemanager.h>
 #include <qDebug>
 
 ListController::ListController(QObject *parent)
@@ -48,7 +49,11 @@ void ListController::appendItem(QString site, QString login, QString password)
 
 void ListController::onCheckCreateEntry(QString site, QString login, QString password)
 {
-    this->appendItem(site, login, password);
+    QByteArray enc_login;
+    QByteArray enc_password;
+    SecureManager::EncryptCredentials(this->key, login.toUtf8(), enc_login);
+    SecureManager::EncryptCredentials(this->key, password.toUtf8(), enc_password);
+    this->appendItem(site, enc_login, enc_password);
     emit entryCreated();
 }
 
@@ -56,6 +61,23 @@ void ListController::onEntryDeleteClicked()
 {
     this->removeCompletedItems();
     emit entryDeleted();
+}
+
+void ListController::onCopyToBuffer(int num, QString type)
+{
+    QByteArray enc_cred;
+    if (type == "login") {
+        enc_cred = this->mItems.at(num).login.toUtf8();
+    }
+    else {
+        enc_cred = this->mItems.at(num).password.toUtf8();
+    }
+
+    QByteArray dec_cred;
+    SecureManager::DecryptCredentials(this->key, enc_cred, dec_cred);
+
+    QClipboard *clipboard = QGuiApplication::clipboard();
+    clipboard->setText(dec_cred);
 }
 
 void ListController::removeCompletedItems()
@@ -77,3 +99,9 @@ void ListController::onJSONparsed(QVector<ListItem> *data)
 {
     this->appendItem(*data);
 }
+
+void ListController::onKeyCreated(QByteArray key)
+{
+    this->key = key;
+}
+

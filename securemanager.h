@@ -27,7 +27,7 @@ public:
     static bool DecryptFile(const QByteArray &key, QFile &jFile, QByteArray &buffer);
     static bool EncryptFile(const QByteArray &key, QFile &jFile , const QByteArray &json);
 
-    static bool DecryptCredentials(const QByteArray &key,const QByteArray &in, QByteArray &out);
+    static bool DecryptCredentials(const QByteArray &key, const QByteArray &in, QByteArray &out);
     static bool EncryptCredentials(const QByteArray &key, const QByteArray &in, QByteArray &out);
 
 

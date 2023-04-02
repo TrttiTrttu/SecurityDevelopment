@@ -22,12 +22,10 @@ QVector<ListItem> SecureManager::ParseJson()
 
     if (jsonDoc.isNull()) {
         qDebug() <<"Error when parsing JSON:" <<err.errorString();
-//        return false;
     }
 
     if (!jsonDoc.isObject()) {
         qDebug() << "JSON is not array";
-//        return false;
     }
 
     QJsonObject jsonObject = jsonDoc.object();
@@ -35,7 +33,6 @@ QVector<ListItem> SecureManager::ParseJson()
 
     if (creds.isEmpty()) {
         qDebug() << "JSON is empty";
-//        return false;
     }
 
     QVector<ListItem> res;
@@ -61,7 +58,6 @@ QVector<ListItem> SecureManager::ParseJson()
 
 bool SecureManager::SaveJson()
 {
-//    qDebug() << this->jFile.fileName();
     QVector <ListItem> tmp = *this->mItems;
 
     for (int i = 0; i < tmp.count(); i++) {
@@ -87,11 +83,9 @@ bool SecureManager::SaveJson()
         qDebug()<<"Failed to open on write";
         return false;
     }
-    qDebug() << "encryption is: " << EncryptFile(this->key, this->jFile, jsonDoc.fromVariant(root_map).toJson());
-    return EncryptFile(this->key, this->jFile, jsonDoc.fromVariant(root_map).toJson());
-//    this->jFile.write(jsonDoc.fromVariant(root_map).toJson());
-//    this->jFile.close();
-//    return true;
+    EncryptFile(this->key, this->jFile, jsonDoc.fromVariant(root_map).toJson());
+    this->jFile.close();
+    return true;
 }
 
 
@@ -101,7 +95,6 @@ QByteArray SecureManager::GenerateKey(const QByteArray pin)
     QByteArray hash = QCryptographicHash::hash(pin, QCryptographicHash::Sha256);
     return hash;
 }
-
 
 bool SecureManager::DecryptFile(const QByteArray &key, QFile &jFile , QByteArray &buffer)
 {
@@ -140,8 +133,6 @@ bool SecureManager::DecryptFile(const QByteArray &key, QFile &jFile , QByteArray
             return false;
         }
 
-        qDebug() << "decrypted_buf + decrypted_len" << decrypted_buf + decrypted_len;
-
         if (decoded_len < 256) {
             int tmplen;
             if (!EVP_DecryptFinal_ex(ctx, decrypted_buf + decrypted_len, &tmplen)) {
@@ -152,7 +143,6 @@ bool SecureManager::DecryptFile(const QByteArray &key, QFile &jFile , QByteArray
             decrypted_len += tmplen;
         }
         buffer += QByteArray((char*)decrypted_buf, decrypted_len);
-        qDebug() << "end buffer: " << buffer;
 
     }
     EVP_CIPHER_CTX_free(ctx);
@@ -211,6 +201,86 @@ bool SecureManager::EncryptFile(const QByteArray &key, QFile &jFile , const QByt
     return true;
 }
 
+bool SecureManager::EncryptCredentials(const QByteArray &key, const QByteArray &in, QByteArray &out)
+{
+    EVP_CIPHER_CTX *ctx;
+    if (!(ctx = EVP_CIPHER_CTX_new())) {
+        return false;
+    }
+
+    if (!EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, (unsigned char *)key.data(), m_iv)) {
+        return false;
+    }
+
+    int encrypted_len = 0;
+    for (qsizetype i = 0; i < in.size(); i += 128) {
+        unsigned char encrypted_buf[128] = {0};
+
+        QByteArray decoded_buf = in.mid(i, 128);
+        int decoded_len =  decoded_buf.size();
+
+        if (!EVP_EncryptUpdate(ctx, encrypted_buf, &encrypted_len, (unsigned char*)decoded_buf.data(), decoded_len)) {
+            return false;
+        }
+
+        if (decoded_len < 128) {
+
+            int tmplen;
+            if (!EVP_EncryptFinal_ex(ctx, encrypted_buf + encrypted_len, &tmplen)) {
+                EVP_CIPHER_CTX_free(ctx);
+                return false;
+            }
+            encrypted_len += tmplen;
+        }
+        out += QByteArray((char*)encrypted_buf, encrypted_len).toHex();
+    }
+
+    EVP_CIPHER_CTX_free(ctx);
+    return true;
+}
+
+
+bool SecureManager::DecryptCredentials(const QByteArray &key, const QByteArray &in, QByteArray &out)
+{
+
+    EVP_CIPHER_CTX *ctx;
+    if (!(ctx = EVP_CIPHER_CTX_new())) {
+        return false;
+    }
+
+    if (!EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, (unsigned char *)key.data(), m_iv)) {
+        return false;
+    }
+
+    int decrypted_len = 0;
+    for (qsizetype i = 0; i < in.size(); i += 128) {
+        unsigned char decrypted_buf[128] = {0};
+
+        QByteArray decoded_buf = QByteArray::fromHex(in.mid(i, 128));
+        int decoded_len =  decoded_buf.size();
+
+        if (!EVP_DecryptUpdate(ctx, decrypted_buf, &decrypted_len, (unsigned char*)decoded_buf.data(), decoded_len)) {
+            return false;
+        }
+
+        if (decoded_len < 128) {
+
+            int tmplen;
+            if (!EVP_DecryptFinal_ex(ctx, decrypted_buf + decrypted_len, &tmplen)) {
+                EVP_CIPHER_CTX_free(ctx);
+                return false;
+            }
+            decrypted_len += tmplen;
+        }
+        out += QByteArray((char*)decrypted_buf, decrypted_len);
+    }
+
+    EVP_CIPHER_CTX_free(ctx);
+    return true;
+}
+
+
+
 void SecureManager::onEntryCreated()
 {
     this->SaveJson();
@@ -224,6 +294,6 @@ void SecureManager::onEntryDeleted()
 void SecureManager::onKeyCreated(QByteArray key)
 {
     this->key = key;
-    QVector<ListItem>  parsed = this->ParseJson();
+    QVector<ListItem> parsed = this->ParseJson();
     emit JSONparsed(&parsed);
 }

@@ -3,7 +3,8 @@
 
 #include <QObject>
 #include <QVector>
-
+#include <QClipboard>
+#include "qguiapplication.h"
 
 struct ListItem
 {
@@ -19,6 +20,7 @@ class ListController : public QObject
 public:
     explicit ListController(QObject *parent = nullptr);
 
+    QByteArray key;
     QVector<ListItem> items() const;
     bool setItemAt(int index, const ListItem &item);
 
@@ -40,8 +42,10 @@ public slots:
     void onCheckCreateEntry(QString site, QString login, QString password);
     void onEntryDeleteClicked();
     void removeCompletedItems();
-    void onJSONparsed(QVector<ListItem>  *data);
 
+    void onJSONparsed(QVector<ListItem>  *data);
+    void onKeyCreated(QByteArray key);
+    void onCopyToBuffer(int num, QString type);
 };
 
 #endif // LISTCONTROLLER_H
