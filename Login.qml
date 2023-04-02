@@ -64,4 +64,12 @@ Page {
             popup.open()
         }
     }
+
+    Connections {
+        target: auth
+        function onAlertPopup(text) {
+            label.text = text;
+            popup.open()
+            }
+        }
 }

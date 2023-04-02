@@ -79,6 +79,7 @@ bool SecureManager::SaveJson()
 
     root_map.insert("creds", creds_list);
 
+    if (jFile.isOpen()) jFile.close();
     if(!this->jFile.open(QIODevice::WriteOnly)){
         qDebug()<<"Failed to open on write";
         return false;
@@ -87,8 +88,6 @@ bool SecureManager::SaveJson()
     this->jFile.close();
     return true;
 }
-
-
 
 QByteArray SecureManager::GenerateKey(const QByteArray pin)
 {
@@ -152,6 +151,7 @@ bool SecureManager::DecryptFile(const QByteArray &key, QFile &jFile , QByteArray
 
 bool SecureManager::EncryptFile(const QByteArray &key, QFile &jFile , const QByteArray &json)
 {
+    if (jFile.isOpen()) jFile.close();
     if (! jFile.open(QIODeviceBase::ReadWrite)) {
         qDebug()<<"Failed to open file:" << jFile.fileName();
         jFile.close();
