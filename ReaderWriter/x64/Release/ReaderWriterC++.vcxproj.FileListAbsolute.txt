@@ -1,0 +1,2 @@
+D:\UCHEBA\secdebv\SecDev\LR2ReadersWriters\ReaderWriterC++\x64\Release\ReaderWriterC++.exe
+D:\UCHEBA\secdebv\SecurityDevelopment\ReaderWriter\x64\Release\ReaderWriterC++.exe
