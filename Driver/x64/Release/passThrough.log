@@ -1,0 +1,4 @@
+﻿  aes.c
+  passThrough.c
+D:\UCHEBA\secdebv\SecurityDevelopment\Driver\passThrough.c(21,10): fatal  error C1083: Не удается открыть файл включение: fltKernel.h: No such file or directory,
+  Создание кода...
